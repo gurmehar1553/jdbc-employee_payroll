@@ -24,8 +24,9 @@ public class EmployeeDBService {
             Statement statement = connection.createStatement();
             return statement.executeUpdate(sql);
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            System.out.println(e.getMessage());
         }
+        return 0;
     }
 
     public List<EmployeeData> readData() throws SQLException {
@@ -83,7 +84,7 @@ public class EmployeeDBService {
     private Connection getConnection() throws SQLException {
         String jdbcURL = "jdbc:mysql://localhost:3306/payroll_service?useSSL=false&allowPublicKeyRetrieval=true";
         String username = "root";
-        String password = "@Gunnu123*";
+        String password = "";
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (Exception e) {
