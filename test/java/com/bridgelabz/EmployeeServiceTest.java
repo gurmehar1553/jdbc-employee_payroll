@@ -2,7 +2,7 @@ package com.bridgelabz;
 
 import jdbc.entity.EmployeeData;
 import jdbc.service.EmployeeService;
-import junit.framework.Assert;
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.sql.SQLException;
@@ -17,6 +17,12 @@ public class EmployeeServiceTest {
         Assert.assertEquals(6,employeeDataList.size());
     }
 
-//    @Test
-//    public void
+    @Test
+    public void givenEmployeeSalaryUpdated_ShouldSyncWithDB() throws SQLException {
+        EmployeeService employeeService = new EmployeeService();
+        List<EmployeeData> employeeDataList = employeeService.readFromTheDatabase(EmployeeService.IOService.DB_IO);
+        employeeService.updateEmployeeData("John",3000000);
+        boolean result = employeeService.checkEmployeeDataSyncWithDB("John");
+        Assert.assertTrue(result);
+    }
 }

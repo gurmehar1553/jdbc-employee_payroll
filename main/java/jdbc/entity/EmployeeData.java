@@ -15,4 +15,11 @@ public class EmployeeData {
         this.salary = salary;
         this.startDate = startDate;
     }
+    @Override
+    public boolean equals(Object o){
+        if(this == o) return true;
+        if(o==null || getClass() != o.getClass()) return false;
+        EmployeeData obj = (EmployeeData) o;
+        return id==obj.id && name.equals(obj.name) && Integer.compare(obj.salary,salary)==0;
+    }
 }
