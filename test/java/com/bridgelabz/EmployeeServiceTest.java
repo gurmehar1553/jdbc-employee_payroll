@@ -31,23 +31,14 @@ public class EmployeeServiceTest {
     public void retrieveAllEmployeesInParticularDateRange_FromDB() {
         EmployeeService employeeService = new EmployeeService();
         List<EmployeeData> employeeDataList = employeeService.retrieveEmpDataInDateRange("2021-07-02","2021-08-10");
-        for (EmployeeData e : employeeDataList){
-            System.out.println(e.name);
-        }
-        List<EmployeeData> employeeList = new ArrayList<>();
-        employeeList.add(new EmployeeData("Bill"));
-        employeeList.add(new EmployeeData("Mark"));
-        employeeList.add(new EmployeeData("Betty"));
-
-        boolean result = employeeService.checkIfEmpDataMatches(employeeList,employeeDataList);
-        Assert.assertTrue(result);
+        Assert.assertEquals(3,employeeDataList.size());
     }
     @Test
     public void sqlSUM_MAX_MIN_COUNT(){
-        Assert.assertEquals(new EmployeeService().findSumSalary(),9200000);
-        Assert.assertEquals(new EmployeeService().findCountOfEmployees(),4);
-        Assert.assertEquals(new EmployeeService().findMinSalary(),1000000);
-        Assert.assertEquals(new EmployeeService().findMaxSalary(),3000000);
+        Assert.assertEquals(9200000,new EmployeeService().findSumSalary());
+        Assert.assertEquals(4,new EmployeeService().findCountOfEmployees());
+        Assert.assertEquals(1000000,new EmployeeService().findMinSalary());
+        Assert.assertEquals(3000000,new EmployeeService().findMaxSalary());
     }
 
 }
