@@ -4,14 +4,12 @@ import jdbc.entity.EmployeeData;
 
 import java.sql.Date;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class EmployeeService {
     private EmployeeDBService employeeDBService;
 
-    public void retrieveEmpDataInDateRange(String s1, String s2) {
-        Date date1 = getDate(s1);
-    }
 
     public enum IOService{CONSOLE_IO, FILE_IO,DB_IO}
     private List<EmployeeData> employeePayrollList;
@@ -35,12 +33,24 @@ public class EmployeeService {
     }
     public boolean checkEmployeeDataSyncWithDB(String name) {
         List<EmployeeData> employeeDataList = employeeDBService.getEmployeeData(name);
-        return employeeDataList.get(0).equals(name);
+        return employeeDataList.get(0).name.equals(name);
     }
     private EmployeeData getEmployeeData(String name) {
         return this.employeePayrollList.stream()
                 .filter(data -> data.name.equals(name))
                 .findFirst()
                 .orElse(null);
+    }
+    public List<EmployeeData> retrieveEmpDataInDateRange(String s1, String s2) {
+        return employeeDBService.getEmployeeDataInDateRange(s1,s2);
+    }
+    public boolean checkIfEmpDataMatches(List<EmployeeData> names, List<EmployeeData> employeeDataList) {
+        if (names.size() != employeeDataList.size()) return false;
+        for (int i=0;i< names.size();i++){
+            if (!names.get(i).equals(employeeDataList.get(i))){
+                return false;
+            }
+        }
+        return true;
     }
 }

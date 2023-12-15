@@ -6,6 +6,8 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -25,13 +27,21 @@ public class EmployeeServiceTest {
         boolean result = employeeService.checkEmployeeDataSyncWithDB("John");
         Assert.assertTrue(result);
     }
-
     @Test
-    public void retrieveAllEmployeesInParticularDateRange_FromDB() throws SQLException {
+    public void retrieveAllEmployeesInParticularDateRange_FromDB() {
         EmployeeService employeeService = new EmployeeService();
-        List<EmployeeData> employeeDataList = employeeService.readFromTheDatabase(EmployeeService.IOService.DB_IO);
-        employeeService.retrieveEmpDataInDateRange("2021-07-02","2021-08-10");
-        boolean result = employeeService.checkIfEmpDataMatches({"Bill","Mark","Betty"});
+        List<EmployeeData> employeeDataList = employeeService.retrieveEmpDataInDateRange("2021-07-02","2021-08-10");
+        for (EmployeeData e : employeeDataList){
+            System.out.println(e.name);
+        }
+        List<EmployeeData> employeeList = new ArrayList<>();
+        employeeList.add(new EmployeeData("Bill"));
+        employeeList.add(new EmployeeData("Mark"));
+        employeeList.add(new EmployeeData("Betty"));
+
+        boolean result = employeeService.checkIfEmpDataMatches(employeeList,employeeDataList);
         Assert.assertTrue(result);
     }
+
+
 }

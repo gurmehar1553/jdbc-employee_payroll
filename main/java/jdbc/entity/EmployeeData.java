@@ -9,6 +9,9 @@ public class EmployeeData {
     public int salary;
     public Date startDate;
 
+    public EmployeeData(String name){
+        this.name = name;
+    }
     public EmployeeData(int id, String name, int salary, Date startDate) {
         this.id = id;
         this.name = name;

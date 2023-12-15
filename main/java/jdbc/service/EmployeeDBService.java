@@ -3,6 +3,7 @@ package jdbc.service;
 import jdbc.entity.EmployeeData;
 
 import java.sql.*;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -78,13 +79,28 @@ public class EmployeeDBService {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-
+    }
+    public List<EmployeeData> getEmployeeDataInDateRange(String s1, String s2) {
+        List<EmployeeData> employeeDataList = new ArrayList<>();
+        String sql = String.format("SELECT NAME FROM employee_payroll where start between CAST('%s' as DATE) and CAST('%s' as DATE)",s1,s2);
+        try {
+            Connection connection = this.getConnection();
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            while (resultSet.next()){
+                String name = resultSet.getString("name");
+                employeeDataList.add(new EmployeeData(name));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return employeeDataList;
     }
 
     private Connection getConnection() throws SQLException {
         String jdbcURL = "jdbc:mysql://localhost:3306/payroll_service?useSSL=false&allowPublicKeyRetrieval=true";
         String username = "root";
-        String password = "@Gunnu123*";
+        String password = "";
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (Exception e) {
@@ -97,4 +113,5 @@ public class EmployeeDBService {
         System.out.println("Connection is established"+connection);
         return connection;
     }
+
 }

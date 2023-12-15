@@ -1,5 +1,7 @@
 package jdbc;
 
+import jdbc.service.EmployeeService;
+
 import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
@@ -10,7 +12,7 @@ public class DBDemo {
     public static void main(String[] args){
         String jdbcURL = "jdbc:mysql://localhost:3306/payroll_service?useSSL=false&allowPublicKeyRetrieval=true";
         String username = "root";
-        String password = "@Gunnu123*";
+        String password = "";
         Connection connection;
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
