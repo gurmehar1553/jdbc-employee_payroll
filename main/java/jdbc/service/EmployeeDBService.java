@@ -80,6 +80,52 @@ public class EmployeeDBService {
             System.out.println(e.getMessage());
         }
     }
+
+    public int findSumSalaryFromDB() throws SQLException {
+        String sql = "SELECT SUM(basic_pay) as sum from employee_payroll where gender='F' group by gender;";
+        ResultSet resultSet = executeQueries(sql);
+        while (resultSet.next()){
+            return resultSet.getInt("sum");
+        }
+        return 0;
+    }
+
+    private ResultSet executeQueries(String sql) {
+        try {
+            Connection connection = this.getConnection();
+            Statement statement = connection.createStatement();
+            return statement.executeQuery(sql);
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public int findMaxSalaryDB() throws SQLException {
+        String sql = "Select MAX(basic_pay) as max_sal from employee_payroll where gender='F' group by gender;";
+        ResultSet resultSet = executeQueries(sql);
+        while (resultSet.next()){
+            return resultSet.getInt("max_sal");
+        }
+        return 0;
+    }
+
+    public int findMinSalaryDB() throws SQLException {
+        String sql = "Select MIN(basic_pay) as min_sal from employee_payroll where gender='F' group by gender;";
+        ResultSet resultSet = executeQueries(sql);
+        while (resultSet.next()){
+            return resultSet.getInt("min_sal");
+        }
+        return 0;
+    }
+    public int findCountFemaleEmployees() throws SQLException {
+        String sql = "Select COUNT(name) as cnt_female from employee_payroll where gender='F' group by gender;";
+        ResultSet resultSet = executeQueries(sql);
+        while (resultSet.next()){
+            return resultSet.getInt("cnt_female");
+        }
+        return 0;
+    }
+
     public List<EmployeeData> getEmployeeDataInDateRange(String s1, String s2) {
         List<EmployeeData> employeeDataList = new ArrayList<>();
         String sql = String.format("SELECT NAME FROM employee_payroll where start between CAST('%s' as DATE) and CAST('%s' as DATE)",s1,s2);

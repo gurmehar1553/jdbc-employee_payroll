@@ -42,6 +42,12 @@ public class EmployeeServiceTest {
         boolean result = employeeService.checkIfEmpDataMatches(employeeList,employeeDataList);
         Assert.assertTrue(result);
     }
-
+    @Test
+    public void sqlSUM_MAX_MIN_COUNT(){
+        Assert.assertEquals(new EmployeeService().findSumSalary(),9200000);
+        Assert.assertEquals(new EmployeeService().findCountOfEmployees(),4);
+        Assert.assertEquals(new EmployeeService().findMinSalary(),1000000);
+        Assert.assertEquals(new EmployeeService().findMaxSalary(),3000000);
+    }
 
 }

@@ -41,6 +41,42 @@ public class EmployeeService {
                 .findFirst()
                 .orElse(null);
     }
+    public int findSumSalary(){
+        int sum_salary;
+        try {
+            sum_salary= employeeDBService.findSumSalaryFromDB();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return sum_salary;
+    }
+    public int findMaxSalary(){
+        int max_salary;
+        try {
+            max_salary= employeeDBService.findMaxSalaryDB();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return max_salary;
+    }
+    public int findMinSalary(){
+        int min_salary;
+        try {
+            min_salary= employeeDBService.findMinSalaryDB();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return min_salary;
+    }
+    public int findCountOfEmployees(){
+        int count;
+        try {
+            count = employeeDBService.findCountFemaleEmployees();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return count;
+    }
     public List<EmployeeData> retrieveEmpDataInDateRange(String s1, String s2) {
         return employeeDBService.getEmployeeDataInDateRange(s1,s2);
     }
