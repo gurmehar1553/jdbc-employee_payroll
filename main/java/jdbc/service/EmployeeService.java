@@ -10,7 +10,6 @@ import java.util.List;
 public class EmployeeService {
     private EmployeeDBService employeeDBService;
 
-
     public enum IOService{CONSOLE_IO, FILE_IO,DB_IO}
     private List<EmployeeData> employeePayrollList;
     public EmployeeService(){
@@ -40,6 +39,9 @@ public class EmployeeService {
                 .filter(data -> data.name.equals(name))
                 .findFirst()
                 .orElse(null);
+    }
+    public void addEmployee(String name, int salary, char gender, String startDate) {
+        employeePayrollList.add(employeeDBService.addEmployeeData(name,salary,gender,startDate));
     }
     public int findSumSalary(){
         int sum_salary;
@@ -79,14 +81,5 @@ public class EmployeeService {
     }
     public List<EmployeeData> retrieveEmpDataInDateRange(String s1, String s2) {
         return employeeDBService.getEmployeeDataInDateRange(s1,s2);
-    }
-    public boolean checkIfEmpDataMatches(List<EmployeeData> names, List<EmployeeData> employeeDataList) {
-        if (names.size() != employeeDataList.size()) return false;
-        for (int i=0;i< names.size();i++){
-            if (!names.get(i).equals(employeeDataList.get(i))){
-                return false;
-            }
-        }
-        return true;
     }
 }

@@ -40,5 +40,13 @@ public class EmployeeServiceTest {
         Assert.assertEquals(1000000,new EmployeeService().findMinSalary());
         Assert.assertEquals(3000000,new EmployeeService().findMaxSalary());
     }
+    @Test
+    public void givenNewEmployeeWhenAdded_SyncWithDB() throws SQLException {
+        EmployeeService employeeService = new EmployeeService();
+        employeeService.readFromTheDatabase(EmployeeService.IOService.DB_IO);
+        employeeService.addEmployee("Mary",50000000,'F',"2017-10-01");
+        boolean result = employeeService.checkEmployeeDataSyncWithDB("Mary");
+        Assert.assertTrue(result);
+    }
 
 }

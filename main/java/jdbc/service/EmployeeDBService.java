@@ -81,6 +81,25 @@ public class EmployeeDBService {
         }
     }
 
+    public EmployeeData addEmployeeData(String name, int salary, char gender, String startDate) {
+        int empId =-1;
+        EmployeeData employeeData = null;
+        String sql = String.format("Insert into employee_payroll (name,basic_pay,gender,start) values('%s',%d,'%s','%s');",
+                name,salary,gender,startDate);
+        try (Connection connection = this.getConnection()){
+            Statement statement = connection.createStatement();
+            int rowAffected = statement.executeUpdate(sql,statement.RETURN_GENERATED_KEYS);
+            if(rowAffected == 1){
+                ResultSet resultSet = statement.getGeneratedKeys();
+                if (resultSet.next()) empId = resultSet.getInt(1);
+                employeeData = new EmployeeData(empId,name,salary,Date.valueOf(startDate));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return employeeData;
+    }
+
     public int findSumSalaryFromDB() throws SQLException {
         String sql = "SELECT SUM(basic_pay) as sum from employee_payroll where gender='F' group by gender;";
         ResultSet resultSet = executeQueries(sql);
@@ -126,6 +145,7 @@ public class EmployeeDBService {
         return 0;
     }
 
+
     public List<EmployeeData> getEmployeeDataInDateRange(String s1, String s2) {
         List<EmployeeData> employeeDataList = new ArrayList<>();
         String sql = String.format("SELECT NAME FROM employee_payroll where start between CAST('%s' as DATE) and CAST('%s' as DATE)",s1,s2);
@@ -159,5 +179,6 @@ public class EmployeeDBService {
         System.out.println("Connection is established"+connection);
         return connection;
     }
+
 
 }
