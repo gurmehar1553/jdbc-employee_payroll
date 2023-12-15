@@ -20,7 +20,7 @@ public class EmployeeDBService {
 
     private int updateEmployeeDataStatement(String name, int salary) {
         String sql = String.format("UPDATE employee_payroll set basic_pay = %d where name ='%s'",salary,name);
-        try(Connection connection = getConnection()) {
+        try(Connection connection = this.getConnection()) {
             Statement statement = connection.createStatement();
             return statement.executeUpdate(sql);
         } catch (SQLException e) {
@@ -84,7 +84,7 @@ public class EmployeeDBService {
     private Connection getConnection() throws SQLException {
         String jdbcURL = "jdbc:mysql://localhost:3306/payroll_service?useSSL=false&allowPublicKeyRetrieval=true";
         String username = "root";
-        String password = "";
+        String password = "@Gunnu123*";
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (Exception e) {

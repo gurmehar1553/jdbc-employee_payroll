@@ -25,4 +25,13 @@ public class EmployeeServiceTest {
         boolean result = employeeService.checkEmployeeDataSyncWithDB("John");
         Assert.assertTrue(result);
     }
+
+    @Test
+    public void retrieveAllEmployeesInParticularDateRange_FromDB() throws SQLException {
+        EmployeeService employeeService = new EmployeeService();
+        List<EmployeeData> employeeDataList = employeeService.readFromTheDatabase(EmployeeService.IOService.DB_IO);
+        employeeService.retrieveEmpDataInDateRange("2021-07-02","2021-08-10");
+        boolean result = employeeService.checkIfEmpDataMatches({"Bill","Mark","Betty"});
+        Assert.assertTrue(result);
+    }
 }

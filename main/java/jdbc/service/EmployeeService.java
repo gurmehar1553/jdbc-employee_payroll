@@ -1,11 +1,18 @@
 package jdbc.service;
 
 import jdbc.entity.EmployeeData;
+
+import java.sql.Date;
 import java.sql.SQLException;
 import java.util.List;
 
 public class EmployeeService {
     private EmployeeDBService employeeDBService;
+
+    public void retrieveEmpDataInDateRange(String s1, String s2) {
+        Date date1 = getDate(s1);
+    }
+
     public enum IOService{CONSOLE_IO, FILE_IO,DB_IO}
     private List<EmployeeData> employeePayrollList;
     public EmployeeService(){
