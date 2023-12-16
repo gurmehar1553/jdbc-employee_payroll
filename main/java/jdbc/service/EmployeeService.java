@@ -9,7 +9,6 @@ import java.util.List;
 
 public class EmployeeService {
     private EmployeeDBService employeeDBService;
-
     public enum IOService{CONSOLE_IO, FILE_IO,DB_IO}
     private List<EmployeeData> employeePayrollList;
     public EmployeeService(){
@@ -32,6 +31,7 @@ public class EmployeeService {
     }
     public boolean checkEmployeeDataSyncWithDB(String name) {
         List<EmployeeData> employeeDataList = employeeDBService.getEmployeeData(name);
+        System.out.println(employeeDataList.get(0).name);
         return employeeDataList.get(0).name.equals(name);
     }
     private EmployeeData getEmployeeData(String name) {
@@ -41,7 +41,10 @@ public class EmployeeService {
                 .orElse(null);
     }
     public void addEmployee(String name, int salary, char gender, String startDate) {
-        employeePayrollList.add(employeeDBService.addEmployeeData(name,salary,gender,startDate));
+        employeePayrollList.add(employeeDBService.addEmployeeDataUC7(name,salary,gender,startDate));
+    }
+    public void addEmployeePayroll(String name, int salary, char gender, String startDate) {
+        employeePayrollList.add(employeeDBService.addEmployeePayrollData(name,salary,gender,startDate));
     }
     public int findSumSalary(){
         int sum_salary;

@@ -81,7 +81,7 @@ public class EmployeeDBService {
         }
     }
 
-    public EmployeeData addEmployeeData(String name, int salary, char gender, String startDate) {
+    public EmployeeData addEmployeeDataUC7(String name, int salary, char gender, String startDate) {
         int empId =-1;
         EmployeeData employeeData = null;
         String sql = String.format("Insert into employee_payroll (name,basic_pay,gender,start) values('%s',%d,'%s','%s');",
@@ -98,6 +98,52 @@ public class EmployeeDBService {
             throw new RuntimeException(e);
         }
         return employeeData;
+    }
+
+    public EmployeeData addEmployeePayrollData(String name, int salary, char gender, String startDate) {
+        int empId = -1;
+        EmployeeData employeePayrollData= null;
+        Connection connection = null;
+        try {
+            connection = this.getConnection();
+            connection.setAutoCommit(false);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        try(Statement statement = connection.createStatement()){
+            double deductions = 0.2*salary;
+            double taxable_pay = salary - deductions;
+            double tax = 0.1*taxable_pay;
+            double net_pay = salary-tax;
+            String sql = String.format("Insert into employee_payroll (name,basic_pay,gender,start,id,deductions,taxable_pay,tax,net_pay,department) " +
+                    "values('%s',%d,'%s','%s',%d,%.2f,%.2f,%.2f,%.2f,'sales')",name,salary,gender,startDate,empId,deductions,taxable_pay,tax,net_pay);
+            int rowAffected = statement.executeUpdate(sql);
+            if(rowAffected == 1){
+                employeePayrollData = new EmployeeData(empId,name,salary,Date.valueOf(startDate));
+            }
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+            try {
+                connection.rollback();
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+            }
+        }
+        try {
+            connection.commit();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        finally {
+            if (connection!=null){
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    System.out.println(e.getMessage());
+                }
+            }
+        }
+        return employeePayrollData;
     }
 
     public int findSumSalaryFromDB() throws SQLException {
@@ -166,7 +212,7 @@ public class EmployeeDBService {
     private Connection getConnection() throws SQLException {
         String jdbcURL = "jdbc:mysql://localhost:3306/payroll_service?useSSL=false&allowPublicKeyRetrieval=true";
         String username = "root";
-        String password = "";
+        String password = "@Gunnu123*";
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (Exception e) {
@@ -179,6 +225,4 @@ public class EmployeeDBService {
         System.out.println("Connection is established"+connection);
         return connection;
     }
-
-
 }
