@@ -6,8 +6,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 
@@ -44,8 +42,8 @@ public class EmployeeServiceTest {
     public void givenNewEmployeeWhenAdded_SyncWithDB() throws SQLException {
         EmployeeService employeeService = new EmployeeService();
         employeeService.readFromTheDatabase(EmployeeService.IOService.DB_IO);
-        employeeService.addEmployeePayroll("Mary",50000000,'F',"2017-10-01");
-        boolean result = employeeService.checkEmployeeDataSyncWithDB("Mary");
+        employeeService.addEmployeePayroll("Mathew",30000000,'M',"2017-10-01");
+        boolean result = employeeService.checkEmployeeDataSyncWithDB("Mathew");
         Assert.assertTrue(result);
     }
 

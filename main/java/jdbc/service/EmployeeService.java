@@ -18,6 +18,13 @@ public class EmployeeService {
         this();
         this.employeePayrollList = employeeDataList;
     }
+
+    /**
+     * Read data from database
+     * @param ioService
+     * @return
+     * @throws SQLException
+     */
     public List<EmployeeData> readFromTheDatabase(EmployeeService.IOService ioService) throws SQLException {
         if(ioService.equals(IOService.DB_IO))
             this.employeePayrollList = employeeDBService.readData();
@@ -29,6 +36,13 @@ public class EmployeeService {
         EmployeeData employeeData = this.getEmployeeData(name);
         if (employeeData != null) employeeData.salary = salary;
     }
+
+    /**
+     * Chech data in memory is sync
+     * with database
+     * @param name
+     * @return
+     */
     public boolean checkEmployeeDataSyncWithDB(String name) {
         List<EmployeeData> employeeDataList = employeeDBService.getEmployeeData(name);
         System.out.println(employeeDataList.get(0).name);
@@ -46,6 +60,7 @@ public class EmployeeService {
     public void addEmployeePayroll(String name, int salary, char gender, String startDate) {
         employeePayrollList.add(employeeDBService.addEmployeePayrollData(name,salary,gender,startDate));
     }
+
     public int findSumSalary(){
         int sum_salary;
         try {

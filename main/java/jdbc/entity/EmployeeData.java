@@ -12,10 +12,9 @@ public class EmployeeData {
     public EmployeeData(String name){
         this.name = name;
     }
-    public EmployeeData(int id, String name, int salary, Date startDate) {
+    public EmployeeData(int id, String name,  Date startDate) {
         this.id = id;
         this.name = name;
-        this.salary = salary;
         this.startDate = startDate;
     }
     @Override
