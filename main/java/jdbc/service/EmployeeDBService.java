@@ -61,9 +61,8 @@ public class EmployeeDBService {
             while (resultSet.next()){
                 int id = resultSet.getInt("id");
                 String name = resultSet.getString("name");
-                int salary = resultSet.getInt("basic_pay");
                 Date startDate = resultSet.getDate("start");
-                employeeDataList.add(new EmployeeData(id,name,salary,startDate));
+                employeeDataList.add(new EmployeeData(id,name,startDate));
             }
         }
         catch (SQLException e){
@@ -72,6 +71,9 @@ public class EmployeeDBService {
         return employeeDataList;
     }
 
+    /**
+     * Creating Prepared Statement
+     */
     private void preparedStatementForEmployeeData() {
         try {
             Connection connection = this.getConnection();
@@ -92,13 +94,22 @@ public class EmployeeDBService {
             if(rowAffected == 1){
                 ResultSet resultSet = statement.getGeneratedKeys();
                 if (resultSet.next()) empId = resultSet.getInt(1);
-                employeeData = new EmployeeData(empId,name,salary,Date.valueOf(startDate));
+                employeeData = new EmployeeData(empId,name,Date.valueOf(startDate));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
         return employeeData;
     }
+
+    /**
+     * Transaction performed
+     * @param name
+     * @param salary
+     * @param gender
+     * @param startDate
+     * @return
+     */
 
     public EmployeeData addEmployeePayrollData(String name, int salary, char gender, String startDate) {
         int empId = -1;
@@ -111,15 +122,31 @@ public class EmployeeDBService {
             throw new RuntimeException(e);
         }
         try(Statement statement = connection.createStatement()){
+            String sql = String.format("Insert into employee_payroll (name,gender,start,department) values('%s','%s','%s','sales');"
+                    ,name,gender,startDate);
+            int rowAffected = statement.executeUpdate(sql,statement.RETURN_GENERATED_KEYS);
+            if(rowAffected == 1){
+                ResultSet resultSet = statement.getGeneratedKeys();
+                if(resultSet.next()) empId = resultSet.getInt(1);
+            }
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+            try {
+                connection.rollback();
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+            }
+        }
+        try(Statement statement = connection.createStatement()){
             double deductions = 0.2*salary;
             double taxable_pay = salary - deductions;
             double tax = 0.1*taxable_pay;
             double net_pay = salary-tax;
-            String sql = String.format("Insert into employee_payroll (name,basic_pay,gender,start,id,deductions,taxable_pay,tax,net_pay,department) " +
-                    "values('%s',%d,'%s','%s',%d,%.2f,%.2f,%.2f,%.2f,'sales')",name,salary,gender,startDate,empId,deductions,taxable_pay,tax,net_pay);
+            String sql = String.format("Insert into payroll_details (emp_id,basic_pay,deductions,taxable_pay,tax,net_pay) " +
+                    "values(%d,%d,%.2f,%.2f,%.2f,%.2f)",empId,salary,deductions,taxable_pay,tax,net_pay);
             int rowAffected = statement.executeUpdate(sql);
             if(rowAffected == 1){
-                employeePayrollData = new EmployeeData(empId,name,salary,Date.valueOf(startDate));
+                employeePayrollData = new EmployeeData(empId,name,Date.valueOf(startDate));
             }
         }catch (SQLException e){
             System.out.println(e.getMessage());
